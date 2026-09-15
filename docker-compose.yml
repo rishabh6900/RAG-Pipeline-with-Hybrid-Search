@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: rag-qdrant-db
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+
+  rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-hybrid-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./src:/app/src
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  rag-ui-angular:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile
+    container_name: rag-hybrid-angular-ui
+    ports:
+      - "4200:80"
+    depends_on:
+      - rag-api
+    restart: unless-stopped

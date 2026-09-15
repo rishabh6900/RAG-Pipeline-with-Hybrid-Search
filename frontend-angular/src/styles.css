@@ -1,0 +1,490 @@
+/* ==========================================================================
+   Enterprise Hybrid RAG - Ultra-Modern Glassmorphic Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+
+:root {
+  /* Common Brand & Neon Accents */
+  --neon-indigo: #6366f1;
+  --neon-indigo-light: #818cf8;
+  --neon-violet: #8b5cf6;
+  --neon-purple: #a855f7;
+  --neon-cyan: #06b6d4;
+  --neon-sky: #0ea5e9;
+  --neon-emerald: #10b981;
+  --neon-mint: #34d399;
+  --neon-amber: #f59e0b;
+  --neon-rose: #f43f5e;
+
+  /* Border Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ==========================================================================
+   Dark Theme Tokens (Default Studio Theme)
+   ========================================================================== */
+html.dark, :root:not(.light) {
+  --bg-dark-0: #060913;
+  --bg-dark-1: #0b1120;
+  --bg-dark-2: #111a2e;
+  --bg-dark-3: #18233c;
+  
+  --bg-glass-1: rgba(11, 17, 32, 0.78);
+  --bg-glass-2: rgba(17, 26, 46, 0.88);
+  --bg-glass-card: rgba(15, 23, 42, 0.65);
+  --bg-glass-card-hover: rgba(24, 35, 60, 0.85);
+  --bg-glass-input: rgba(6, 9, 19, 0.85);
+  --bg-inner-box: rgba(6, 9, 19, 0.7);
+  --bg-code-box: #04060b;
+  --bg-drawer: linear-gradient(180deg, #0b1120 0%, #060913 100%);
+
+  --border-glass-subtle: rgba(255, 255, 255, 0.08);
+  --border-glass-medium: rgba(255, 255, 255, 0.16);
+  --border-glass-glow: rgba(99, 102, 241, 0.45);
+  --border-card-highlight: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02) 40%, rgba(99, 102, 241, 0.25) 100%);
+
+  --text-pure: #ffffff;
+  --text-1: #f1f5f9;
+  --text-2: #94a3b8;
+  --text-3: #64748b;
+  --text-muted: #475569;
+
+  --grad-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  --grad-hero: linear-gradient(135deg, #a5b4fc 0%, #c084fc 40%, #38bdf8 100%);
+  --grad-surface: linear-gradient(180deg, rgba(17, 26, 46, 0.9) 0%, rgba(11, 17, 32, 0.95) 100%);
+  --grad-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.75);
+  --glow-indigo: 0 0 30px rgba(99, 102, 241, 0.3);
+  --glow-cyan: 0 0 30px rgba(6, 182, 212, 0.25);
+  --glow-emerald: 0 0 30px rgba(16, 185, 129, 0.25);
+
+  --body-pattern: 
+    radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.14) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    
+  --overlay-bg: rgba(4, 6, 11, 0.82);
+}
+
+/* ==========================================================================
+   Light Theme Tokens (Pristine Studio Modern Theme)
+   ========================================================================== */
+html.light, body.light {
+  --bg-dark-0: #f4f6fb;
+  --bg-dark-1: #ffffff;
+  --bg-dark-2: #f8fafc;
+  --bg-dark-3: #edf2f7;
+  
+  --bg-glass-1: rgba(255, 255, 255, 0.92);
+  --bg-glass-2: rgba(248, 250, 252, 0.96);
+  --bg-glass-card: rgba(255, 255, 255, 0.92);
+  --bg-glass-card-hover: #ffffff;
+  --bg-glass-input: #ffffff;
+  --bg-inner-box: #f1f5f9;
+  --bg-code-box: #0f172a;
+  --bg-drawer: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+
+  --border-glass-subtle: rgba(15, 23, 42, 0.08);
+  --border-glass-medium: rgba(15, 23, 42, 0.15);
+  --border-glass-glow: rgba(99, 102, 241, 0.35);
+  --border-card-highlight: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(15, 23, 42, 0.03) 40%, rgba(6, 182, 212, 0.25) 100%);
+
+  --text-pure: #0f172a;
+  --text-1: #1e293b;
+  --text-2: #475569;
+  --text-3: #64748b;
+  --text-muted: #94a3b8;
+
+  --grad-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0284c7 100%);
+  --grad-hero: linear-gradient(135deg, #3730a3 0%, #6d28d9 40%, #0369a1 100%);
+  --grad-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --grad-emerald: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  
+  --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 45px rgba(15, 23, 42, 0.12);
+  --glow-indigo: 0 0 25px rgba(99, 102, 241, 0.15);
+  --glow-cyan: 0 0 25px rgba(6, 182, 212, 0.15);
+  --glow-emerald: 0 0 25px rgba(16, 185, 129, 0.15);
+
+  --body-pattern: 
+    radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+
+  --overlay-bg: rgba(15, 23, 42, 0.65);
+}
+
+/* ==========================================================================
+   Base Styles & Reset
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark-0);
+  color: var(--text-1);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  background-image: var(--body-pattern);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ambient Float Background Aura Orb */
+body::before {
+  content: '';
+  position: fixed;
+  top: -15%;
+  left: 15%;
+  width: 70vw;
+  height: 70vh;
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1), transparent 70%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: -1;
+  animation: auroraDrift 20s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-60px, 50px) scale(1.1); }
+  100% { transform: translate(50px, -30px) scale(0.95); }
+}
+
+/* ==========================================================================
+   Reusable Glassmorphism Utilities
+   ========================================================================== */
+
+.glass-panel {
+  background: var(--bg-glass-1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--border-card-highlight);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glass-medium);
+  box-shadow: var(--shadow-lg), var(--glow-indigo);
+}
+
+.glass-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.glass-card:hover {
+  background: var(--bg-glass-card-hover);
+  border-color: var(--border-glass-medium);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 25px rgba(99, 102, 241, 0.12);
+}
+
+/* ==========================================================================
+   Typography & Helpers
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-pure);
+  letter-spacing: -0.025em;
+}
+
+.text-gradient {
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-cyan-gradient {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-emerald-gradient {
+  background: linear-gradient(135deg, #059669, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.badge-emerald {
+  background: rgba(16, 185, 129, 0.14);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+html.dark .badge-emerald { color: #34d399; }
+
+.badge-cyan {
+  background: rgba(6, 182, 212, 0.14);
+  color: #0284c7;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
+html.dark .badge-cyan { color: #38bdf8; }
+
+.badge-indigo {
+  background: rgba(99, 102, 241, 0.15);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+html.dark .badge-indigo { color: #a5b4fc; }
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.14);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+html.dark .badge-amber { color: #fbbf24; }
+
+.badge-rose {
+  background: rgba(244, 63, 94, 0.14);
+  color: #e11d48;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+html.dark .badge-rose { color: #fb7185; }
+
+/* ==========================================================================
+   Animations & Keyframes
+   ========================================================================== */
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulseRadar {
+  0% { transform: scale(1); opacity: 0.9; }
+  70% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.4; transform: scale(0.98); }
+  100% { opacity: 0.8; transform: scale(1.02); }
+}
+
+@keyframes shimmerEffect {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeInScale 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark-0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-glass-medium);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+/* ==========================================================================
+   Grounded Typography, Tables, and Math Expressions
+   ========================================================================== */
+
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass-medium);
+  background: var(--bg-inner-box);
+  box-shadow: var(--shadow-sm);
+}
+
+.ans-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.ans-table th {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--text-pure);
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-glass-medium);
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+html.dark .ans-table th {
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+}
+
+.ans-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-glass-subtle);
+  color: var(--text-1);
+  font-size: 0.86rem;
+  vertical-align: middle;
+}
+
+.ans-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ans-table tbody tr:hover {
+  background: var(--bg-glass-card-hover);
+}
+
+.math-expr {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--neon-indigo);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  white-space: nowrap;
+}
+html.dark .math-expr {
+  background: rgba(99, 102, 241, 0.16);
+  color: #a5b4fc;
+}
+
+.math-block {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  background: var(--bg-inner-box);
+  color: var(--neon-indigo);
+  padding: 0.85rem 1.25rem;
+  margin: 0.85rem 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass-medium);
+  text-align: center;
+  overflow-x: auto;
+}
+html.dark .math-block {
+  color: #a5b4fc;
+}
+
+.ans-h1, .ans-h2, .ans-h3, .ans-h4 {
+  color: var(--text-pure);
+  font-weight: 800;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.ans-h1 { font-size: 1.4rem; }
+.ans-h2 { font-size: 1.25rem; }
+.ans-h3 { font-size: 1.1rem; }
+.ans-h4 { font-size: 0.98rem; }
+
+.ans-ul, .ans-ol {
+  margin: 0.75rem 0 1rem 1.25rem;
+  padding-left: 0.5rem;
+}
+
+.ans-li, .ans-oli {
+  margin-bottom: 0.45rem;
+  line-height: 1.65;
+  color: var(--text-1);
+}
+
+.ans-bold {
+  font-weight: 700;
+  color: var(--text-pure);
+  background: rgba(99, 102, 241, 0.08);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+}
+
+.ans-italic {
+  font-style: italic;
+  color: var(--text-1);
+}
+

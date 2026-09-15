@@ -1,0 +1,38 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the command to rotate database credentials in HashiCorp Vault?",
+    "target_source": "auth_and_security.md",
+    "category": "exact_lookup"
+  },
+  {
+    "id": "q02",
+    "question": "What is the error code when a JWT signature timestamp has expired?",
+    "target_source": "auth_and_security.md",
+    "category": "technical_acronym"
+  },
+  {
+    "id": "q03",
+    "question": "What is the maximum connection timeout for PostgreSQL and what is the idle socket timeout?",
+    "target_source": "database_operations.md",
+    "category": "exact_lookup"
+  },
+  {
+    "id": "q04",
+    "question": "What are the MaxSurge and MaxUnavailable settings for zero downtime Kubernetes deployments?",
+    "target_source": "kubernetes_deployments.md",
+    "category": "exact_lookup"
+  },
+  {
+    "id": "q05",
+    "question": "What is the grace period when draining database sockets during Vault credential rotation and pod termination in Kubernetes?",
+    "target_source": "auth_and_security.md",
+    "category": "multi_hop"
+  },
+  {
+    "id": "q06",
+    "question": "How do we configure Apache Kafka SASL authentication topics?",
+    "target_source": "none",
+    "category": "unanswerable"
+  }
+]

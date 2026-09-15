@@ -1,0 +1,242 @@
+<div class="app-shell">
+  <!-- Top Navigation Header with Live Telemetry -->
+  <app-header [status]="systemStatus"></app-header>
+
+  <!-- Navigation View Tabs -->
+  <div class="view-tabs-bar">
+    <div class="tabs-container glass-panel">
+      <button
+        [class.active]="activeMainTab === 'query'"
+        (click)="activeMainTab = 'query'"
+        class="tab-link"
+      >
+        <div class="tab-icon-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <span class="tab-title">Ask & Synthesize</span>
+        <span class="tab-kbd">⌘1</span>
+      </button>
+
+      <button
+        [class.active]="activeMainTab === 'corpus'"
+        (click)="activeMainTab = 'corpus'"
+        class="tab-link"
+      >
+        <div class="tab-icon-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </div>
+        <span class="tab-title">Documents & Corpus</span>
+        <span class="corpus-count-badge">{{ documentsData?.raw_documents_count || 0 }}</span>
+      </button>
+
+      <button
+        [class.active]="activeMainTab === 'ablation'"
+        (click)="activeMainTab = 'ablation'"
+        class="tab-link"
+      >
+        <div class="tab-icon-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+        </div>
+        <span class="tab-title">Strategy Benchmark</span>
+        <span class="tab-kbd">⌘2</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab View 1: Interactive Query & Synthesis -->
+  <div *ngIf="activeMainTab === 'query'" class="main-tab-content animate-fade-in">
+    <!-- Search Bar Console -->
+    <app-search-bar
+      [isLoading]="isLoading"
+      (querySubmit)="onQuerySubmit($event)"
+    ></app-search-bar>
+
+    <!-- High-Tech Pipeline Progress Animation -->
+    <div *ngIf="isLoading" class="loading-state-card glass-panel">
+      <div class="loading-glow-line"></div>
+      <div class="loading-title-row">
+        <span class="loading-pulse-dot"></span>
+        <span class="loading-main-label">Executing Multi-Stage Enterprise RAG Pipeline</span>
+      </div>
+      <div class="loading-pipeline-flow">
+        <div class="pipeline-step active">
+          <div class="step-spinner"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 1: Dual Retrieval & RRF</span>
+            <span class="step-desc">Qdrant Cosine (Top-15) + BM25Okapi</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="pipeline-step active">
+          <div class="step-spinner violet-spin"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 2: Cross-Encoder Rerank</span>
+            <span class="step-desc">ms-marco token cross-attention (Top-5)</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="pipeline-step active">
+          <div class="step-spinner cyan-spin"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 3: LangChain & Judge</span>
+            <span class="step-desc">Grounded generation & citation verification</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Response Grid (Left: Answer, Right: Confidence Gauge) -->
+    <div class="response-grid animate-fade-in" *ngIf="queryResponse && !isLoading">
+      <div class="answer-column">
+        <app-answer-view
+          [response]="queryResponse"
+          (openDrawer)="isDrawerOpen = true"
+        ></app-answer-view>
+      </div>
+
+      <div class="analytics-column">
+        <app-confidence-gauge
+          [scores]="queryResponse.confidence_scores"
+        ></app-confidence-gauge>
+      </div>
+    </div>
+
+    <!-- Hero Showcase (When no query executed yet) -->
+    <div class="hero-showcase animate-fade-in" *ngIf="!queryResponse && !isLoading">
+      <div class="showcase-header">
+        <div class="pill-tag">
+          <span class="sparkle-icon">✨</span>
+          <span>Dual-Engine Neural & Lexical Architecture</span>
+        </div>
+        <h2 class="showcase-headline">
+          Industrial-Grade Retrieval with <span class="text-gradient">Zero-Hallucination Guardrails</span>
+        </h2>
+        <p class="showcase-lead">
+          Execute dense semantic searches combined with exact BM25 lexical term matching, reranked by deep Cross-Encoders and verified with deterministic citation mapping.
+        </p>
+      </div>
+
+      <!-- 4-Stage Architecture Flow Diagram -->
+      <div class="architecture-flow glass-card">
+        <div class="flow-stage">
+          <div class="stage-num">01</div>
+          <div class="stage-icon">📂</div>
+          <div class="stage-body">
+            <span class="stage-title">Structure-Aware Parsing</span>
+            <span class="stage-desc">Markdown & PDF headers preserved</span>
+          </div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">▶</div>
+        </div>
+
+        <div class="flow-stage">
+          <div class="stage-num">02</div>
+          <div class="stage-icon">⚡</div>
+          <div class="stage-body">
+            <span class="stage-title">Hybrid RRF Fusion</span>
+            <span class="stage-desc">Qdrant Vectors + BM25 Okapi</span>
+          </div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">▶</div>
+        </div>
+
+        <div class="flow-stage">
+          <div class="stage-num">03</div>
+          <div class="stage-icon">🧠</div>
+          <div class="stage-body">
+            <span class="stage-title">Cross-Encoder Rerank</span>
+            <span class="stage-desc">ms-marco full attention scoring</span>
+          </div>
+        </div>
+
+        <div class="flow-connector">
+          <div class="connector-line"></div>
+          <div class="connector-arrow">▶</div>
+        </div>
+
+        <div class="flow-stage highlight-stage">
+          <div class="stage-num">04</div>
+          <div class="stage-icon">🛡️</div>
+          <div class="stage-body">
+            <span class="stage-title">Citation Verification</span>
+            <span class="stage-desc">Sentence-level claim attribution</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three Pillars Grid -->
+      <div class="features-trio-grid">
+        <div class="feature-card glass-card">
+          <div class="feature-icon-box cyan-box">🌌</div>
+          <h3 class="feature-heading">Hybrid Fusion & RRF</h3>
+          <p class="feature-text">
+            Eliminates semantic drift on exact technical keywords (error codes, CLI flags, IDs) by fusing dense vector distance with BM25 term frequency.
+          </p>
+        </div>
+
+        <div class="feature-card glass-card">
+          <div class="feature-icon-box violet-box">🎯</div>
+          <h3 class="feature-heading">Deep Cross-Encoder</h3>
+          <p class="feature-text">
+            Evaluates query-passage cross-attention directly rather than single-vector dot products, filtering out spurious false-positive chunk matches.
+          </p>
+        </div>
+
+        <div class="feature-card glass-card">
+          <div class="feature-icon-box emerald-box">🛡️</div>
+          <h3 class="feature-heading">Fact Grounding & Fallback</h3>
+          <p class="feature-text">
+            Automated confidence gating triggers graceful degradation alerts if retrieved evidence is insufficient or confidence score falls below 60%.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab View 2: Chunking Strategy Ablation Matrix -->
+  <div *ngIf="activeMainTab === 'ablation'" class="main-tab-content animate-fade-in">
+    <app-search-bar
+      [isLoading]="isComparing"
+      (querySubmit)="runStrategyComparison($event)"
+    ></app-search-bar>
+
+    <app-strategy-compare
+      [comparisonData]="comparisonData"
+    ></app-strategy-compare>
+  </div>
+
+  <!-- Tab View 3: Document Ingestion & Corpus Explorer -->
+  <div *ngIf="activeMainTab === 'corpus'" class="main-tab-content animate-fade-in">
+    <app-document-ingest
+      [documentsData]="documentsData"
+      [isUploading]="isUploading"
+      (ingestRequest)="onDocumentIngest($event)"
+      (syncRawRequest)="onSyncRawDocuments($event)"
+      (goToSearch)="activeMainTab = 'query'"
+    ></app-document-ingest>
+  </div>
+
+  <!-- Citations & Context Drawer Slide-Over -->
+  <app-citation-drawer
+    [isOpen]="isDrawerOpen"
+    [citations]="queryResponse?.citations || []"
+    [chunks]="queryResponse?.retrieved_chunks || []"
+    (closeDrawer)="isDrawerOpen = false"
+  ></app-citation-drawer>
+</div>
