@@ -92,39 +92,39 @@ Most traditional RAG implementations are toy demos: single-file PDF loaders with
 ```mermaid
 flowchart TD
     subgraph INGESTION["Phase 1: Ingestion & Chunking Engine"]
-        A[Raw Documents: PDF, MD, HTML, TXT] --> B[DocumentParser: Normalization & SHA-256]
-        B --> C[Metadata Extractor: Source, Breadcrumb, Header, Page]
-        C --> D{Chunking Strategy}
-        D -->|Fixed-Size| D1[FixedSizeChunker: 512 tokens / 64 overlap]
-        D -->|Structure-Aware| D2[StructureAwareChunker: Header Split & Breadcrumbs]
-        D -->|Semantic Topic| D3[SemanticTopicChunker: LangChain & Cosine Distance Spikes]
-        D1 & D2 & D3 --> E[ChunkDeduplicator: Cosine Sim > 0.95 Gate]
-        E --> F1[Dense Store: Qdrant Vector Collection]
-        E --> F2[Sparse Store: BM25 Token Corpus]
+        A["Raw Documents: PDF, MD, HTML, TXT"] --> B["DocumentParser: Normalization & SHA-256"]
+        B --> C["Metadata Extractor: Source, Breadcrumb, Header, Page"]
+        C --> D{"Chunking Strategy"}
+        D -->|"Fixed-Size"| D1["FixedSizeChunker: 512 tokens / 64 overlap"]
+        D -->|"Structure-Aware"| D2["StructureAwareChunker: Header Split & Breadcrumbs"]
+        D -->|"Semantic Topic"| D3["SemanticTopicChunker: LangChain & Cosine Distance Spikes"]
+        D1 & D2 & D3 --> E["ChunkDeduplicator: Cosine Sim > 0.95 Gate"]
+        E --> F1["Dense Store: Qdrant Vector Collection"]
+        E --> F2["Sparse Store: BM25 Token Corpus"]
     end
 
     subgraph RETRIEVAL["Phase 2: Hybrid Retrieval & Reranking"]
-        Q[User Query] --> G1[Dense Embedder: OpenAI / Local Normalized]
-        Q --> G2[BM25 Technical Query Tokenizer]
-        G1 --> H1[Qdrant Cosine Search: Top-15]
-        G2 --> H2[BM25Okapi Keyword Search: Top-15]
+        Q["User Query"] --> G1["Dense Embedder: OpenAI / Local Normalized"]
+        Q --> G2["BM25 Technical Query Tokenizer"]
+        G1 --> H1["Qdrant Cosine Search: Top-15"]
+        G2 --> H2["BM25Okapi Keyword Search: Top-15"]
         F1 -.-> H1
         F2 -.-> H2
-        H1 & H2 --> I[FusionEngine: Reciprocal Rank Fusion RRF]
-        I --> J[Fused Candidate Pool: Top-20]
-        J --> K[CrossEncoderReranker: ms-marco-MiniLM-L-6-v2]
-        K --> L[High-Precision Context Chunks: Top-5]
+        H1 & H2 --> I["FusionEngine: Reciprocal Rank Fusion RRF"]
+        I --> J["Fused Candidate Pool: Top-20"]
+        J --> K["CrossEncoderReranker: ms-marco-MiniLM-L-6-v2"]
+        K --> L["High-Precision Context Chunks: Top-5"]
     end
 
     subgraph GENERATION["Phase 3: LangChain LCEL Generation & Guardrails"]
-        L --> M[PromptTemplate with Strict Citation Rules]
+        L --> M["PromptTemplate with Strict Citation Rules"]
         Q --> M
-        M --> N[LangChain LCEL Chain: ChatGroq / ChatOpenAI / Local]
-        N --> O[Generated Answer with Bracketed Citations: [1], [2]]
-        O --> P[CitationVerifier: LLM-as-a-Judge Claim Entailment]
-        P --> R[ConfidenceScorer: Retrieval + Citation + Completeness]
-        R -->|Confidence >= 0.60| S[Verified Answer + Citation Drawer + Confidence Breakdown]
-        R -->|Confidence < 0.60| T[Structured Graceful Fallback + Suggested Documents]
+        M --> N["LangChain LCEL Chain: ChatGroq / ChatOpenAI / Local"]
+        N --> O["Generated Answer with Bracketed Citations"]
+        O --> P["CitationVerifier: LLM-as-a-Judge Claim Entailment"]
+        P --> R["ConfidenceScorer: Retrieval + Citation + Completeness"]
+        R -->|"Confidence >= 0.60"| S["Verified Answer + Citation Drawer + Confidence Breakdown"]
+        R -->|"Confidence < 0.60"| T["Structured Graceful Fallback + Suggested Documents"]
     end
 ```
 

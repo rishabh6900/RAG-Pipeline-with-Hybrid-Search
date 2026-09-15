@@ -224,11 +224,11 @@ sequenceDiagram
     participant Judge as LLM-as-a-Judge Verifier
     participant Response as Final Answer Builder
 
-    LLM->>Parser: Raw Output with [1], [2] Citations
-    Parser->>Parser: Extract tuples: (Claim_i, [Citation_j], Context_Chunk_j)
+    LLM->>Parser: Raw Output with Citations
+    Parser->>Parser: Extract tuples: Claim, Citation, Context Chunk
     loop For Each Claim-Citation Pair
-        Parser->>Judge: Check Entailment (Claim_i, Context_Chunk_j)
-        Judge-->>Parser: Result: [SUPPORTED | CONTRADICTED | UNFOUNDED]
+        Parser->>Judge: Check Entailment (Claim, Context Chunk)
+        Judge-->>Parser: Result: SUPPORTED / CONTRADICTED / UNFOUNDED
     end
     alt All Verified
         Parser->>Response: Emit Verified Answer + Citation Meta
