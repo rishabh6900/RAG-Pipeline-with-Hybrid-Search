@@ -5,8 +5,6 @@ from config.settings import settings
 from src.api.routes.documents import router as documents_router
 from src.api.routes.health import router as health_router
 from src.api.routes.query import router as query_router
-from src.api.main import app
-
 
 app = FastAPI(
     title="Enterprise Hybrid RAG API",
@@ -50,10 +48,3 @@ if __name__ == "__main__":
         port=settings.API_PORT,
         reload=True
     )
-
-# main.py
-from src.api.main import app
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
