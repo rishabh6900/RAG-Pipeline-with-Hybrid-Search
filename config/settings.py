@@ -49,7 +49,7 @@ class Settings(BaseSettings):
 
     # Server Settings
     API_HOST: str = "0.0.0.0"
-    API_PORT: int = 8000
+    API_PORT: int = int(os.getenv("PORT", "8000"))
     ANGULAR_PORT: int = 4200
     CORS_ORIGINS: list[str] = [
         "http://localhost:4200",
