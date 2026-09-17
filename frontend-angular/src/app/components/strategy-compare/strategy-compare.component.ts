@@ -11,7 +11,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
     <div class="compare-container glass-panel" *ngIf="comparisonData">
       <div class="compare-header">
         <div class="header-left">
-          <div class="arena-icon">🔬</div>
           <div>
             <h2 class="compare-title">Chunking Strategy Ablation & Benchmark</h2>
             <p class="compare-subtitle">Evaluating Fixed-Size (512/64) vs Structure-Aware Header Splitting vs Semantic Topic Boundaries</p>
@@ -30,8 +29,8 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
           
           <div class="card-top">
             <div class="card-badge-row">
-              <span class="badge badge-emerald">🏆 Champion • Structure-Aware</span>
-              <span class="latency-tag">⚡ {{ comparisonData.structure_aware_strategy_answer.processing_time_ms }} ms</span>
+              <span class="badge badge-emerald">Champion • Structure-Aware</span>
+              <span class="latency-tag">{{ comparisonData.structure_aware_strategy_answer.processing_time_ms }} ms</span>
             </div>
             <h3 class="card-name">Structure-Aware Chunking</h3>
             <p class="card-desc">Hierarchically slices on Markdown & PDF header levels, retaining document tree breadcrumbs and metadata context.</p>
@@ -69,7 +68,7 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
           <div class="card-top">
             <div class="card-badge-row">
               <span class="badge badge-cyan">Baseline • Fixed Window</span>
-              <span class="latency-tag">⚡ {{ comparisonData.fixed_strategy_answer.processing_time_ms }} ms</span>
+              <span class="latency-tag">{{ comparisonData.fixed_strategy_answer.processing_time_ms }} ms</span>
             </div>
             <h3 class="card-name">Fixed-Size Overlap (512 / 64)</h3>
             <p class="card-desc">Naive sliding window token split. High risk of truncating code blocks, table definitions, and list items.</p>
@@ -107,7 +106,7 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
           <div class="card-top">
             <div class="card-badge-row">
               <span class="badge badge-amber">Adaptive • Semantic Split</span>
-              <span class="latency-tag">⚡ {{ comparisonData.semantic_strategy_answer.processing_time_ms }} ms</span>
+              <span class="latency-tag">{{ comparisonData.semantic_strategy_answer.processing_time_ms }} ms</span>
             </div>
             <h3 class="card-name">Semantic Topic Boundaries</h3>
             <p class="card-desc">Calculates sliding sentence embedding cosine distances, cutting chunks where thematic distance spikes above threshold.</p>

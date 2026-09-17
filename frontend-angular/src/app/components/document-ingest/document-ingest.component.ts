@@ -12,7 +12,6 @@ import { DocumentsResponse } from '../../models/rag.models';
       <!-- Section Header -->
       <div class="ingest-header">
         <div class="header-left">
-          <div class="header-icon">📚</div>
           <div>
             <h2 class="ingest-title">Internal Documentation Corpus</h2>
             <p class="ingest-subtitle">Multi-format enterprise ingestion with automated structure parsing, deduplication, and dual-store indexing</p>
@@ -64,10 +63,10 @@ import { DocumentsResponse } from '../../models/rag.models';
           <div class="strategy-selector-wrapper">
             <label class="strategy-label">Indexing Strategy:</label>
             <select [(ngModel)]="selectedStrategy" class="strategy-select">
-              <option value="all">⚡ All Strategies (Structure + Fixed + Semantic for Benchmark)</option>
-              <option value="structure_aware">🏗️ Structure-Aware (Header Tree Splitter)</option>
-              <option value="fixed">📏 Fixed-Size Window (512 tokens / 64 overlap)</option>
-              <option value="semantic">🧠 LangChain SemanticChunker (Adaptive Topic Splitter)</option>
+              <option value="all">All Strategies (Structure + Fixed + Semantic for Benchmark)</option>
+              <option value="structure_aware">Structure-Aware (Header Tree Splitter)</option>
+              <option value="fixed">Fixed-Size Window (512 tokens / 64 overlap)</option>
+              <option value="semantic">LangChain SemanticChunker (Adaptive Topic Splitter)</option>
             </select>
           </div>
 
@@ -113,7 +112,7 @@ import { DocumentsResponse } from '../../models/rag.models';
           <span class="success-text">{{ uploadSuccessMessage }}</span>
         </div>
         <button (click)="goToSearch.emit()" class="ask-now-btn">
-          💬 Ask Questions Now →
+          Ask Questions Now →
         </button>
       </div>
 
@@ -129,7 +128,7 @@ import { DocumentsResponse } from '../../models/rag.models';
             (click)="syncAllFiles()"
             [disabled]="isUploading"
           >
-            ⚡ Re-Index All Files
+            Re-Index All Files
           </button>
         </div>
 
@@ -137,7 +136,6 @@ import { DocumentsResponse } from '../../models/rag.models';
           <div *ngFor="let doc of documentsData?.raw_documents" class="doc-card glass-card">
             <div class="doc-header">
               <div class="doc-file-badge">
-                <span class="doc-icon">{{ getFileIcon(doc) }}</span>
                 <span class="doc-type-label">{{ getFileType(doc) }}</span>
               </div>
               <span class="dual-indexed-tag">
@@ -160,7 +158,6 @@ import { DocumentsResponse } from '../../models/rag.models';
         </div>
 
         <div *ngIf="!documentsData?.raw_documents || documentsData?.raw_documents?.length === 0" class="empty-corpus-state glass-card">
-          <div class="empty-icon">📁</div>
           <h4 class="empty-title">Corpus Index Ready for Documents</h4>
           <p class="empty-desc">Upload your internal technical runbooks, architecture specs, or API guides above to begin querying.</p>
         </div>
@@ -689,10 +686,7 @@ export class DocumentIngestComponent {
   }
 
   getFileIcon(filename: string): string {
-    if (filename.endsWith('.pdf')) return '📕';
-    if (filename.endsWith('.md') || filename.endsWith('.mdx')) return '📝';
-    if (filename.endsWith('.html') || filename.endsWith('.htm')) return '🌐';
-    return '📄';
+    return '';
   }
 
   getFileType(filename: string): string {

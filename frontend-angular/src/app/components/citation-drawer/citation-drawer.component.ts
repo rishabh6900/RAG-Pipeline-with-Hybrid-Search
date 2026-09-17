@@ -13,7 +13,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
         <!-- Drawer Header -->
         <div class="drawer-header">
           <div class="header-left">
-            <div class="drawer-icon">🛡️</div>
             <div>
               <h2 class="drawer-title">Context & Citation Matrix</h2>
               <p class="drawer-subtitle">Inspect raw document chunks, BM25 lexical matches, and Cross-Encoder attention spans</p>
@@ -29,7 +28,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
             (click)="activeTab = 'citations'"
             class="tab-btn"
           >
-            <span class="tab-icon">📑</span>
             <span>Verified Claims & Citations ({{ citations.length }})</span>
           </button>
           <button
@@ -37,7 +35,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
             (click)="activeTab = 'chunks'"
             class="tab-btn"
           >
-            <span class="tab-icon">🔍</span>
             <span>Retrieved Context Chunks ({{ chunks.length }})</span>
           </button>
         </div>
@@ -80,7 +77,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
             </div>
 
             <div *ngIf="!citations || citations.length === 0" class="empty-state glass-card">
-              <div class="empty-icon">🏷️</div>
               <p>No citation tags generated for this response.</p>
             </div>
           </div>
@@ -123,7 +119,6 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
             </div>
 
             <div *ngIf="!chunks || chunks.length === 0" class="empty-state glass-card">
-              <div class="empty-icon">🔍</div>
               <p>No chunks retrieved for this query.</p>
             </div>
           </div>

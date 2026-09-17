@@ -10,7 +10,6 @@ import { ConfidenceScores } from '../../models/rag.models';
     <div class="gauge-card glass-panel">
       <div class="gauge-header">
         <div class="gauge-title-box">
-          <div class="gauge-icon">🎯</div>
           <div>
             <h3 class="gauge-title">Grounding & Confidence</h3>
             <p class="gauge-subtitle">Multivariate Evidence Metric</p>

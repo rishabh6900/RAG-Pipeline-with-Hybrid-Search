@@ -35,7 +35,6 @@
 - [Evaluation & Benchmark Suite](#-evaluation--benchmark-suite)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
 - [Enterprise Architecture & System Design Decisions](#-enterprise-architecture--system-design-decisions)
-- [Troubleshooting & FAQs](#-troubleshooting--faqs)
 - [License](#-license)
 
 ---
@@ -416,156 +415,14 @@ docker compose up --build
 ## 📡 API Reference
 
 ### 1. Ask a Question (`POST /v1/ask`)
-Executes hybrid retrieval, reranking, LangChain LCEL generation, citation verification, and confidence scoring.
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/v1/ask" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "What is the command to rotate database secrets in Vault and what is the timeout?",
-    "top_k": 5,
-    "retrieval_mode": "hybrid",
-    "chunking_strategy": "structure_aware",
-    "hybrid_weights": {
-      "dense": 0.7,
-      "sparse": 0.3
-    },
-    "use_reranker": true,
-    "verify_citations": true
-  }'
-```
-
-**Response (`200 OK`):**
-```json
-{
-  "question": "What is the command to rotate database secrets in Vault and what is the timeout?",
-  "answer": "To rotate database secrets in Vault, execute `vault kv put secret/db-prod` [1]. The grace period for existing connection pool draining is strictly 15 minutes before hard termination [1].",
-  "status": "success",
-  "confidence_scores": {
-    "composite": 0.942,
-    "retrieval_relevance": 0.960,
-    "citation_grounding": 1.0,
-    "answer_completeness": 0.880
-  },
-  "citations": [
-    {
-      "citation_id": "1",
-      "claim": "To rotate database secrets in Vault, execute vault kv put secret/db-prod",
-      "chunk_id": "doc_a3f9e8_chunk_001",
-      "source_file": "auth_and_security.md",
-      "section": "Vault Operations > Secret Rotation",
-      "verified": true,
-      "verdict": "SUPPORTED",
-      "reasoning": "Context explicitly defines the command vault kv put secret/db-prod with a 15-minute drain timeout.",
-      "snippet": "[Vault Operations > Secret Rotation]\nTo rotate database credentials in Vault, execute `vault kv put secret/db-prod`..."
-    }
-  ],
-  "retrieved_chunks": [
-    {
-      "chunk_id": "doc_a3f9e8_chunk_001",
-      "text": "[Vault Operations > Secret Rotation]\nTo rotate database credentials in Vault, execute `vault kv put secret/db-prod`...",
-      "source_path": "data/raw/auth_and_security.md",
-      "section_title": "Vault Operations > Secret Rotation",
-      "chunk_index": 1,
-      "token_count": 48,
-      "dense_score": 0.92,
-      "sparse_score": 14.5,
-      "rrf_score": 0.0245,
-      "rerank_score": 3.42
-    }
-  ],
-  "retrieved_chunks_count": 5,
-  "processing_time_ms": 348.25,
-  "fallback_report": null
-}
-```
-
----
 
 ### 2. Compare Chunking Strategies (`POST /v1/chunking/compare`)
-Executes the query across **Fixed-Size**, **Structure-Aware**, and **Semantic** chunking strategies side-by-side.
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/v1/chunking/compare" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "What are the Kubernetes zero-downtime rolling update settings?",
-    "retrieval_mode": "hybrid"
-  }'
-```
-
-**Response (`200 OK`):**
-Returns a JSON object with:
-- `fixed_strategy_answer`
-- `structure_aware_strategy_answer`
-- `semantic_strategy_answer`
-
----
 
 ### 3. Ingest Documents (`POST /v1/ingest`)
-Multipart file upload supporting `.pdf`, `.md`, `.html`, and `.txt`.
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/v1/ingest" \
-  -F "file=@./data/raw/kubernetes_deployments.md" \
-  -F "strategy=structure_aware"
-```
-
-**Response (`200 OK`):**
-```json
-{
-  "status": "success",
-  "message": "Successfully ingested and indexed 'kubernetes_deployments.md' using strategy 'structure_aware'.",
-  "total_documents": 1,
-  "total_chunks": 4,
-  "indexed_chunks": 4,
-  "duplicates_skipped": 0
-}
-```
-
----
 
 ### 4. List Indexed Documents (`GET /v1/documents`)
-```bash
-curl -X GET "http://localhost:8000/v1/documents"
-```
-
-**Response (`200 OK`):**
-```json
-{
-  "total_indexed_chunks_dense": 42,
-  "total_indexed_chunks_sparse": 42,
-  "raw_documents_count": 7,
-  "raw_documents": [
-    "auth_and_security.md",
-    "database_operations.md",
-    "kubernetes_deployments.md",
-    "Docker_Complete_Notes.pdf"
-  ]
-}
-```
-
----
 
 ### 5. Health Check (`GET /healthz`)
-```bash
-curl -X GET "http://localhost:8000/healthz"
-```
-
-**Response (`200 OK`):**
-```json
-{
-  "status": "healthy",
-  "total_chunks_dense": 42,
-  "total_chunks_sparse": 42,
-  "embedding_model": "text-embedding-3-small",
-  "llm_model": "llama-3.1-8b-instant",
-  "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2"
-}
-```
 
 ---
 
@@ -631,24 +488,6 @@ pytest tests/test_citations_and_confidence.py -v
 5. **Graceful Fallback & Composite Confidence Scoring:**
    - Instead of binary pass/fail, our composite formula combines retrieval relevance ($40\%$), citation grounding ($35\%$), and answer completeness ($25\%$).
    - When confidence drops below $0.60$, the system generates a transparent fallback explaining what could not be substantiated and recommending specific internal documents for human review.
-
----
-
-## 🛠 Troubleshooting & FAQs
-
-#### Q1: `'npm' is not recognized as an internal or external command`
-- **Cause:** Node.js / npm is not installed or not in your Windows `PATH`.
-- **Solution:** If using Conda, simply run:
-  ```bash
-  conda install -c conda-forge nodejs -y
-  ```
-  Or install Node.js via `winget install OpenJS.NodeJS.LTS` or from [nodejs.org](https://nodejs.org/).
-
-#### Q2: Can the pipeline run completely offline without OpenAI/Groq API keys?
-- **Yes.** If no API keys are provided in `.env`, the system defaults to deterministic normalized embeddings, BM25 sparse search, heuristic cross-encoder ranking, and an offline grounded generation synthesizer.
-
-#### Q3: How do I switch LLM models or providers?
-- Open `.env` and set `LLM_MODEL=llama-3.3-70b-versatile` (for Groq) or `LLM_MODEL=gpt-4o` (for OpenAI). The LangChain LCEL pipeline automatically switches the underlying provider client.
 
 ---
 

@@ -59,21 +59,20 @@ import { QueryRequest } from '../../models/rag.models';
       <!-- Quick Suggestion Prompts -->
       <div class="quick-prompts">
         <div class="prompt-label-group">
-          <span class="sparkle-tag">✨</span>
           <span class="prompt-label">Quick Starters:</span>
         </div>
         <div class="chips-container">
           <button (click)="setPrompt('What is the CLI command to rotate database secrets in Vault?')" class="prompt-chip">
-            <span class="chip-emoji">🔐</span> Vault Secret Rotation
+            Vault Secret Rotation
           </button>
           <button (click)="setPrompt('What are the zero downtime deployment settings for Kubernetes?')" class="prompt-chip">
-            <span class="chip-emoji">☸️</span> K8s Zero-Downtime
+            K8s Zero-Downtime
           </button>
           <button (click)="setPrompt('What is the error code when a JWT timestamp is expired?')" class="prompt-chip">
-            <span class="chip-emoji">🔑</span> JWT Expiry Errors
+            JWT Expiry Errors
           </button>
           <button (click)="setPrompt('What is the connection pool max size and timeout for PostgreSQL?')" class="prompt-chip">
-            <span class="chip-emoji">⚡</span> PgBouncer Pool Limits
+            PgBouncer Pool Limits
           </button>
         </div>
       </div>
@@ -87,7 +86,7 @@ import { QueryRequest } from '../../models/rag.models';
           [class.active]="showAdvanced"
         >
           <span class="toggle-icon">{{ showAdvanced ? '▼' : '▶' }}</span>
-          <span>⚙️ {{ showAdvanced ? 'Hide Advanced Settings' : 'Advanced Pipeline Settings' }}</span>
+          <span>{{ showAdvanced ? 'Hide Advanced Settings' : 'Advanced Pipeline Settings' }}</span>
           <span class="active-mode-pill" *ngIf="!showAdvanced">Hybrid RRF (70/30) • Rerank ON</span>
         </button>
       </div>
@@ -148,21 +147,21 @@ import { QueryRequest } from '../../models/rag.models';
               (click)="request.retrieval_mode = 'hybrid'"
               class="seg-btn hybrid-active"
             >
-              ⚡ Hybrid (RRF)
+              Hybrid (RRF)
             </button>
             <button
               [class.active]="request.retrieval_mode === 'dense'"
               (click)="request.retrieval_mode = 'dense'"
               class="seg-btn"
             >
-              🌌 Dense
+              Dense
             </button>
             <button
               [class.active]="request.retrieval_mode === 'sparse'"
               (click)="request.retrieval_mode = 'sparse'"
               class="seg-btn"
             >
-              📝 BM25
+              BM25
             </button>
           </div>
         </div>

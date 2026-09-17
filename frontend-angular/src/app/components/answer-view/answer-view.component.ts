@@ -26,7 +26,7 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
               </span>
             </div>
             <p class="processing-tag">
-              ⚡ Generated in <span class="highlight-stat">{{ response.processing_time_ms }} ms</span> • 
+              Generated in <span class="highlight-stat">{{ response.processing_time_ms }} ms</span> • 
               <span>{{ response.retrieved_chunks_count }} Passages Evaluated</span>
             </p>
           </div>
