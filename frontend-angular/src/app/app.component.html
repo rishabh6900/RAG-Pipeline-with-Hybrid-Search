@@ -55,62 +55,6 @@
 
   <!-- Tab View 1: Interactive Query & Synthesis -->
   <div *ngIf="activeMainTab === 'query'" class="main-tab-content animate-fade-in">
-    <!-- Search Bar Console -->
-    <app-search-bar
-      [isLoading]="isLoading"
-      (querySubmit)="onQuerySubmit($event)"
-    ></app-search-bar>
-
-    <!-- High-Tech Pipeline Progress Animation -->
-    <div *ngIf="isLoading" class="loading-state-card glass-panel">
-      <div class="loading-glow-line"></div>
-      <div class="loading-title-row">
-        <span class="loading-pulse-dot"></span>
-        <span class="loading-main-label">Executing Multi-Stage Enterprise RAG Pipeline</span>
-      </div>
-      <div class="loading-pipeline-flow">
-        <div class="pipeline-step active">
-          <div class="step-spinner"></div>
-          <div class="step-info">
-            <span class="step-title">Stage 1: Dual Retrieval & RRF</span>
-            <span class="step-desc">Qdrant Cosine (Top-15) + BM25Okapi</span>
-          </div>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="pipeline-step active">
-          <div class="step-spinner violet-spin"></div>
-          <div class="step-info">
-            <span class="step-title">Stage 2: Cross-Encoder Rerank</span>
-            <span class="step-desc">ms-marco token cross-attention (Top-5)</span>
-          </div>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="pipeline-step active">
-          <div class="step-spinner cyan-spin"></div>
-          <div class="step-info">
-            <span class="step-title">Stage 3: LangChain & Judge</span>
-            <span class="step-desc">Grounded generation & citation verification</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active Response Grid (Left: Answer, Right: Confidence Gauge) -->
-    <div class="response-grid animate-fade-in" *ngIf="queryResponse && !isLoading">
-      <div class="answer-column">
-        <app-answer-view
-          [response]="queryResponse"
-          (openDrawer)="isDrawerOpen = true"
-        ></app-answer-view>
-      </div>
-
-      <div class="analytics-column">
-        <app-confidence-gauge
-          [scores]="queryResponse.confidence_scores"
-        ></app-confidence-gauge>
-      </div>
-    </div>
-
     <!-- Hero Showcase (When no query executed yet) -->
     <div class="hero-showcase animate-fade-in" *ngIf="!queryResponse && !isLoading">
       <div class="showcase-header">
@@ -197,6 +141,62 @@
             Automated confidence gating triggers graceful degradation alerts if retrieved evidence is insufficient or confidence score falls below 60%.
           </p>
         </div>
+      </div>
+    </div>
+
+    <!-- Search Bar Console -->
+    <app-search-bar
+      [isLoading]="isLoading"
+      (querySubmit)="onQuerySubmit($event)"
+    ></app-search-bar>
+
+    <!-- High-Tech Pipeline Progress Animation -->
+    <div *ngIf="isLoading" class="loading-state-card glass-panel">
+      <div class="loading-glow-line"></div>
+      <div class="loading-title-row">
+        <span class="loading-pulse-dot"></span>
+        <span class="loading-main-label">Executing Multi-Stage Enterprise RAG Pipeline</span>
+      </div>
+      <div class="loading-pipeline-flow">
+        <div class="pipeline-step active">
+          <div class="step-spinner"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 1: Dual Retrieval & RRF</span>
+            <span class="step-desc">Qdrant Cosine (Top-15) + BM25Okapi</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="pipeline-step active">
+          <div class="step-spinner violet-spin"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 2: Cross-Encoder Rerank</span>
+            <span class="step-desc">ms-marco token cross-attention (Top-5)</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="pipeline-step active">
+          <div class="step-spinner cyan-spin"></div>
+          <div class="step-info">
+            <span class="step-title">Stage 3: LangChain & Judge</span>
+            <span class="step-desc">Grounded generation & citation verification</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Response Grid (Left: Answer, Right: Confidence Gauge) -->
+    <div class="response-grid animate-fade-in" *ngIf="queryResponse && !isLoading">
+      <div class="answer-column">
+        <app-answer-view
+          [response]="queryResponse"
+          (openDrawer)="isDrawerOpen = true"
+        ></app-answer-view>
+      </div>
+
+      <div class="analytics-column">
+        <app-confidence-gauge
+          [scores]="queryResponse.confidence_scores"
+        ></app-confidence-gauge>
       </div>
     </div>
   </div>
