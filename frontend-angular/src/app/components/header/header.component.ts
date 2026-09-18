@@ -377,12 +377,85 @@ import { ThemeService } from '../../services/theme.service';
     @media (max-width: 1024px) {
       .header-container {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        align-items: stretch;
+        gap: 1.1rem;
+        padding: 1.1rem 1.25rem;
       }
       .status-cluster {
         width: 100%;
-        justify-content: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-container {
+        padding: 0.9rem 1rem;
+        margin-bottom: 1.15rem;
+      }
+      .logo-group {
+        gap: 0.75rem;
+      }
+      .logo-icon-wrapper, .logo-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+      }
+      .logo-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .logo-title {
+        font-size: 1.12rem;
+      }
+      .version-badge {
+        font-size: 0.62rem;
+        padding: 0.12rem 0.45rem;
+      }
+      .logo-subtitle {
+        font-size: 0.7rem;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+      .status-cluster {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.45rem;
+        width: 100%;
+      }
+      .status-capsule {
+        grid-column: span 2;
+        justify-content: center;
+        padding: 0.35rem 0.75rem;
+      }
+      .telemetry-pill {
+        padding: 0.35rem 0.55rem;
+        gap: 0.45rem;
+        min-width: 0;
+      }
+      .pill-icon-wrap {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+      }
+      .pill-icon-wrap svg {
+        width: 12px;
+        height: 12px;
+      }
+      .pill-title {
+        font-size: 0.58rem;
+      }
+      .pill-val {
+        font-size: 0.72rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .theme-toggle-btn {
+        grid-column: span 2;
+        justify-content: center;
+        padding: 0.45rem 0.75rem;
       }
     }
   `]

@@ -379,6 +379,42 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
       border-radius: 4px;
     }
     html.dark ::ng-deep .citation-chip-inline { color: #a5b4fc; }
+
+    @media (max-width: 768px) {
+      .compare-container {
+        padding: 1.15rem 1rem;
+        margin-top: 0.75rem;
+      }
+
+      .compare-header {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1rem;
+        gap: 0.75rem;
+      }
+
+      .compare-title {
+        font-size: 1.15rem;
+      }
+
+      .strategy-grid {
+        grid-template-columns: 1fr;
+        gap: 1.15rem;
+      }
+
+      .strategy-card {
+        padding: 1.15rem 1rem;
+      }
+
+      .card-badge-row {
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .sub-metrics-row {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
   `]
 })
 export class StrategyCompareComponent {

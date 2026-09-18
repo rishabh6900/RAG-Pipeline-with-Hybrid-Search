@@ -668,6 +668,99 @@ import { QueryRequest } from '../../models/rag.models';
     .switch-card.checked .switch-title {
       color: var(--text-pure);
     }
+
+    @media (max-width: 680px) {
+      .search-panel {
+        padding: 1rem 0.9rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .input-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.85rem;
+      }
+
+      .search-textarea {
+        font-size: 0.94rem;
+        width: 100%;
+      }
+
+      .input-actions {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 0.65rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border-glass-subtle);
+      }
+
+      .submit-button {
+        flex: 1;
+        justify-content: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.86rem;
+      }
+
+      .quick-prompts {
+        margin-top: 0.85rem;
+        padding-bottom: 0.85rem;
+        gap: 0.45rem;
+      }
+
+      .prompt-chip {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.65rem;
+      }
+
+      .mode-toggle-bar {
+        justify-content: stretch;
+      }
+
+      .advanced-toggle-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .control-group {
+        width: 100%;
+      }
+
+      .segmented-control {
+        width: 100%;
+      }
+
+      .seg-btn {
+        flex: 1;
+        justify-content: center;
+        font-size: 0.72rem;
+        padding: 0.45rem 0.3rem;
+      }
+
+      .slider-group {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .toggles-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      .switch-card {
+        justify-content: center;
+      }
+    }
   `]
 })
 export class SearchBarComponent {

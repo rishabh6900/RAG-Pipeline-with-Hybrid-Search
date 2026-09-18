@@ -347,6 +347,42 @@ import { ConfidenceScores } from '../../models/rag.models';
     .cyan-fill { background: linear-gradient(90deg, #06b6d4, #38bdf8); }
     .emerald-fill { background: linear-gradient(90deg, #059669, #34d399); }
     .indigo-fill { background: linear-gradient(90deg, #4f46e5, #818cf8); }
+
+    @media (max-width: 680px) {
+      .gauge-card {
+        padding: 1.15rem 1rem;
+      }
+
+      .gauge-title {
+        font-size: 1rem;
+      }
+
+      .meter-wrapper {
+        padding: 0.75rem;
+        gap: 0.85rem;
+      }
+
+      .radial-gauge {
+        width: 85px;
+        height: 85px;
+      }
+
+      .gauge-percentage {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .meter-wrapper {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem 0.75rem;
+      }
+
+      .score-level-badge {
+        justify-content: center;
+      }
+    }
   `]
 })
 export class ConfidenceGaugeComponent {

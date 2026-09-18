@@ -384,7 +384,7 @@ html.dark .highlight-stage .stage-title {
   }
   .architecture-flow {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 1.25rem;
   }
   .flow-connector {
@@ -392,5 +392,147 @@ html.dark .highlight-stage .stage-title {
   }
   .features-trio-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 0.75rem 0.75rem 2.5rem 0.75rem;
+  }
+
+  .view-tabs-bar {
+    margin-bottom: 1.25rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .view-tabs-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs-container {
+    width: 100%;
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    min-width: 0;
+  }
+
+  .tab-link {
+    flex: 1;
+    justify-content: center;
+    padding: 0.55rem 0.65rem;
+    font-size: 0.78rem;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .tab-icon-wrap svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .tab-kbd {
+    display: none;
+  }
+
+  .corpus-count-badge {
+    font-size: 0.68rem;
+    padding: 0.05rem 0.4rem;
+  }
+
+  .showcase-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .showcase-headline {
+    font-size: 1.55rem;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .showcase-lead {
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+
+  .pill-tag {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .architecture-flow {
+    padding: 1.15rem;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .flow-stage {
+    gap: 0.65rem;
+  }
+
+  .stage-title {
+    font-size: 0.84rem;
+  }
+
+  .stage-desc {
+    font-size: 0.72rem;
+  }
+
+  .features-trio-grid {
+    gap: 1rem;
+  }
+
+  .feature-card {
+    padding: 1.25rem;
+  }
+
+  .feature-heading {
+    font-size: 1rem;
+  }
+
+  .feature-text {
+    font-size: 0.8rem;
+  }
+
+  /* Loading State Responsive */
+  .loading-state-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .loading-pipeline-flow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .pipeline-step {
+    min-width: 0;
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .step-arrow {
+    display: none;
+  }
+
+  .response-grid {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-shell {
+    padding: 0.5rem 0.5rem 2rem 0.5rem;
+  }
+
+  .tab-title {
+    font-size: 0.74rem;
+  }
+
+  .showcase-headline {
+    font-size: 1.35rem;
   }
 }

@@ -491,6 +491,72 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
     }
 
     .empty-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+
+    @media (max-width: 680px) {
+      .drawer-container {
+        padding: 1.15rem 0.9rem;
+        max-width: 100vw;
+      }
+
+      .drawer-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.85rem;
+      }
+
+      .drawer-title {
+        font-size: 1.15rem;
+      }
+
+      .drawer-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.35rem;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .tab-btn {
+        font-size: 0.72rem;
+        padding: 0.45rem 0.35rem;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .citation-card, .chunk-card {
+        padding: 1rem 0.85rem;
+      }
+
+      .cit-card-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .cit-top-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .chunk-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .chunk-title {
+        max-width: 180px;
+      }
+
+      .scores-cluster {
+        width: 100%;
+        gap: 0.25rem;
+      }
+
+      .score-badge {
+        font-size: 0.65rem;
+        padding: 0.12rem 0.35rem;
+      }
+    }
   `]
 })
 export class CitationDrawerComponent {

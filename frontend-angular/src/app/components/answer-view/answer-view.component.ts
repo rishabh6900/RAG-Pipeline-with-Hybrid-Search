@@ -462,6 +462,82 @@ import { formatMarkdownHtml } from '../../utils/markdown-formatter';
     
     .unverified-pill .pill-verdict { color: #e11d48; }
     html.dark .unverified-pill .pill-verdict { color: #fb7185; }
+
+    @media (max-width: 680px) {
+      .answer-card {
+        padding: 1.15rem 1rem;
+      }
+
+      .answer-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+      }
+
+      .header-title-box {
+        gap: 0.75rem;
+      }
+
+      .icon-sparkle {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        flex-shrink: 0;
+      }
+
+      .icon-sparkle svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .section-title {
+        font-size: 1.15rem;
+      }
+
+      .title-with-badge {
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+
+      .header-actions {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.78rem;
+      }
+
+      .formatted-text {
+        font-size: 0.92rem;
+        word-break: break-word;
+      }
+
+      .citations-pill-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+
+      .citation-chips-wrap {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .citation-pill {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .pill-src {
+        max-width: 140px;
+      }
+    }
   `]
 })
 export class AnswerViewComponent {

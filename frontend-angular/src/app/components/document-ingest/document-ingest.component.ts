@@ -634,6 +634,91 @@ import { DocumentsResponse } from '../../models/rag.models';
     .empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
     .empty-title { font-size: 1.1rem; color: var(--text-pure); margin-bottom: 0.35rem; }
     .empty-desc { font-size: 0.84rem; color: var(--text-2); max-width: 500px; margin: 0 auto; }
+
+    @media (max-width: 768px) {
+      .ingest-card {
+        padding: 1.15rem 1rem;
+        margin-top: 0.75rem;
+      }
+
+      .ingest-header {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1rem;
+        gap: 0.75rem;
+      }
+
+      .ingest-title {
+        font-size: 1.15rem;
+      }
+
+      .dropzone-box {
+        padding: 1.25rem 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .dropzone-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+      }
+
+      .upload-icon-circle {
+        width: 44px;
+        height: 44px;
+      }
+
+      .drop-primary {
+        font-size: 0.88rem;
+      }
+
+      .drop-secondary {
+        font-size: 0.72rem;
+      }
+
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .strategy-selector-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.35rem;
+        width: 100%;
+      }
+
+      .strategy-select {
+        width: 100%;
+      }
+
+      .action-buttons-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      .sync-all-btn, .ingest-submit-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .upload-success-alert {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+      }
+
+      .ask-now-btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   `]
 })
 export class DocumentIngestComponent {
