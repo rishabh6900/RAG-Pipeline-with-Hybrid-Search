@@ -239,15 +239,15 @@ sequenceDiagram
 
 - **Deconstruction:** The answer is parsed into atomic assertions: $A = \{a_1, a_2, ..., a_m\}$ where each assertion $a_i$ maps to citation tags $\mathcal{C}_i \subseteq \{1, 2, ..., N\}$.
 - **Verification Judge:** For each pair $(a_i, \text{Chunk}_j)$, the verifier prompt evaluates:
-  $$\text{Verdict}(a_i, \text{Chunk}_j) \in \{\text{SUPPORTED}, \text{PARTIALLY\_SUPPORTED}, \text{UNSUPPORTED}\}$$
+  $$\text{Verdict}(a_i, \text{Chunk}_j) \in \{\text{SUPPORTED}, \text{PARTIALLY-SUPPORTED}, \text{UNSUPPORTED}\}$$
 - If a citation is $\text{UNSUPPORTED}$, it is flagged in the metadata and stripped from the user-facing text to prevent false authority.
 
 #### 3. Answer Confidence Scoring Engine (`src/generation/confidence_scorer.py`)
 Calculates a composite confidence score $S \in [0.0, 1.0]$:
-$$S = w_1 \cdot S_{\text{retrieval}} + w_2 \cdot S_{\text{citation\_grounding}} + w_3 \cdot S_{\text{completeness}}$$
+$$S = w_1 \cdot S_{\text{retrieval}} + w_2 \cdot S_{\text{citation-grounding}} + w_3 \cdot S_{\text{completeness}}$$
 
 - **Retrieval Relevance ($S_{\text{retrieval}}$):** Normalized average cross-encoder score of top 3 chunks.
-- **Citation Grounding ($S_{\text{citation\_grounding}}$):** $\frac{\text{Count of Supported Citations}}{\text{Total Citations Generated}}$.
+- **Citation Grounding ($S_{\text{citation-grounding}}$):** $\frac{\text{Count of Supported Citations}}{\text{Total Citations Generated}}$.
 - **Answer Completeness ($S_{\text{completeness}}$):** Heuristic or LLM judgment assessing if the generated answer addressed all question sub-clauses.
 
 **Graceful Degradation Threshold:**
