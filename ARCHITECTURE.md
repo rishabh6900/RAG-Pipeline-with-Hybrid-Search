@@ -161,10 +161,14 @@ graph LR
    - Enforces minimum chunk size (100 tokens) to prevent orphaned titles, and maximum chunk size (800 tokens) with internal sentence splitting.
    - Prepends parent breadcrumb headers (e.g., `Authentication > OAuth2 > Refresh Token Flow`) to every sub-chunk to preserve semantic context.
 3. **Semantic Topic Boundary Chunking:**
-   - Segment input into individual sentences: $S = [s_1, s_2, ..., s_n]$.
+   - Segment input into individual sentences: $S = [s_1, s_2, \dots, s_n]$.
    - Compute sentence embeddings $E(s_i)$ using `text-embedding-3-small`.
    - Calculate sliding cosine distance between window vectors:
-     $$d_i = 1 - \cos(E(s_i), E(s_{i+1}))$$
+
+$$
+d_i = 1 - \cos(E(s_i), E(s_{i+1}))
+$$
+
    - Identify transition breakpoints where $d_i > \mu_d + k \cdot \sigma_d$ (e.g., $90\text{th}$ percentile threshold).
    - Group sentences between breakpoints into topic-coherent chunks.
 
@@ -172,7 +176,11 @@ graph LR
 - Before adding a chunk $c_{\text{new}}$ to the indices:
   1. Compute embedding vector $\vec{v}_{\text{new}}$.
   2. Query existing index for the nearest neighbor within cosine similarity radius:
-     $$\cos(\vec{v}_{\text{new}}, \vec{v}_{\text{existing}}) \ge 0.95$$
+
+$$
+\cos(\vec{v}_{\text{new}}, \vec{v}_{\text{existing}}) \ge 0.95
+$$
+
   3. If similarity exceeds $0.95$, mark chunk as duplicate, record parent doc reference, and omit from insertion.
   4. Prevents context degradation from boilerplate disclaimers, duplicate changelogs, or cloned repositories.
 
@@ -192,10 +200,14 @@ graph LR
 
 #### 2. Reciprocal Rank Fusion (RRF) & Weighted Hybrid Search (`src/retrieval/fusion.py`)
 Given user query $q$:
-1. Retrieve top-$K$ ($K=15$) from Dense Store: $\mathcal{R}_{\text{dense}} = \{d_{d,1}, d_{d,2}, ..., d_{d,K}\}$.
-2. Retrieve top-$K$ ($K=15$) from Sparse Index: $\mathcal{R}_{\text{sparse}} = \{d_{s,1}, d_{s,2}, ..., d_{s,K}\}$.
+1. Retrieve top-$K$ ($K=15$) from Dense Store: $\mathcal{R}_{\text{dense}} = \{d_{d,1}, d_{d,2}, \dots, d_{d,K}\}$.
+2. Retrieve top-$K$ ($K=15$) from Sparse Index: $\mathcal{R}_{\text{sparse}} = \{d_{s,1}, d_{s,2}, \dots, d_{s,K}\}$.
 3. Compute fused rank score for each unique document $d \in \mathcal{R}_{\text{dense}} \cup \mathcal{R}_{\text{sparse}}$:
-   $$\text{Score}_{\text{RRF}}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{sparse}}(d)}$$
+
+$$
+\text{Score}_{\text{RRF}}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{sparse}}(d)}
+$$
+
    *(where smoothing constant $k = 60$, $w_{\text{dense}} = 0.70$, $w_{\text{sparse}} = 0.30$ by default).*
 4. Rank all candidates by $\text{Score}_{\text{RRF}}(d)$ and pass the top 20 candidates to the Reranker.
 
@@ -237,14 +249,21 @@ sequenceDiagram
     end
 ```
 
-- **Deconstruction:** The answer is parsed into atomic assertions: $A = \{a_1, a_2, ..., a_m\}$ where each assertion $a_i$ maps to citation tags $\mathcal{C}_i \subseteq \{1, 2, ..., N\}$.
+- **Deconstruction:** The answer is parsed into atomic assertions: $A = \{a_1, a_2, \dots, a_m\}$ where each assertion $a_i$ maps to citation tags $\mathcal{C}_i \subseteq \{1, 2, \dots, N\}$.
 - **Verification Judge:** For each pair $(a_i, \text{Chunk}_j)$, the verifier prompt evaluates:
-  $$\text{Verdict}(a_i, \text{Chunk}_j) \in \{\text{SUPPORTED}, \text{PARTIALLY-SUPPORTED}, \text{UNSUPPORTED}\}$$
+
+$$
+\text{Verdict}(a_i, \text{Chunk}_j) \in \{\text{SUPPORTED}, \text{PARTIALLY-SUPPORTED}, \text{UNSUPPORTED}\}
+$$
+
 - If a citation is $\text{UNSUPPORTED}$, it is flagged in the metadata and stripped from the user-facing text to prevent false authority.
 
 #### 3. Answer Confidence Scoring Engine (`src/generation/confidence_scorer.py`)
 Calculates a composite confidence score $S \in [0.0, 1.0]$:
-$$S = w_1 \cdot S_{\text{retrieval}} + w_2 \cdot S_{\text{citation-grounding}} + w_3 \cdot S_{\text{completeness}}$$
+
+$$
+S = w_1 \cdot S_{\text{retrieval}} + w_2 \cdot S_{\text{citation-grounding}} + w_3 \cdot S_{\text{completeness}}
+$$
 
 - **Retrieval Relevance ($S_{\text{retrieval}}$):** Normalized average cross-encoder score of top 3 chunks.
 - **Citation Grounding ($S_{\text{citation-grounding}}$):** $\frac{\text{Count of Supported Citations}}{\text{Total Citations Generated}}$.

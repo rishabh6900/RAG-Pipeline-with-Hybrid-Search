@@ -96,7 +96,11 @@ Implement dual-channel retrieval (Dense + Sparse), fuse results via Reciprocal R
 
 #### Step 2.3: Reciprocal Rank Fusion (RRF) (`src/retrieval/fusion.py`)
 - Combine ranked lists using parameterized RRF formula:
-  $$\text{Score}(d) = \frac{0.70}{60 + \text{rank}_{\text{dense}}(d)} + \frac{0.30}{60 + \text{rank}_{\text{sparse}}(d)}$$
+
+$$
+\text{Score}(d) = \frac{0.70}{60 + \text{rank}_{\text{dense}}(d)} + \frac{0.30}{60 + \text{rank}_{\text{sparse}}(d)}
+$$
+
 - Output Top-20 merged candidates.
 
 #### Step 2.4: Cross-Encoder Reranker (`src/retrieval/reranker.py`)
@@ -132,7 +136,11 @@ Generate answers strictly grounded in retrieved context with verified inline cit
 
 #### Step 3.3: Composite Answer Confidence Scorer (`src/generation/confidence_scorer.py`)
 - Composite Metric Formula:
-  $$\text{Confidence} = 0.40 \cdot \text{RetrievalRelevance} + 0.35 \cdot \text{CitationGrounding} + 0.25 \cdot \text{Completeness}$$
+
+$$
+\text{Confidence} = 0.40 \cdot \text{RetrievalRelevance} + 0.35 \cdot \text{CitationGrounding} + 0.25 \cdot \text{Completeness}
+$$
+
 - If $\text{Confidence} < 0.60$, activate the graceful fallback structure.
 
 ---

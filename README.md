@@ -147,8 +147,12 @@ flowchart TD
 - **Atomic Ingestion:** Both stores are synchronized simultaneously during document ingestion.
 
 ### 4. Reciprocal Rank Fusion (RRF) & Weighted Hybrid Search
-- Combines ranked results from Dense ($R_{\text{dense}}$) and Sparse ($R_{\text{sparse}}$) queries using standard RRF ($k=60$):
-  $$\text{Score}_{\text{RRF}}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{sparse}}(d)}$$
+- Combines ranked results from Dense ($R_{\text{dense}}$) and Sparse ($R_{\text{sparse}}$) queries using standard RRF ($k = 60$):
+
+$$
+\text{Score}_{\text{RRF}}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{sparse}}(d)}
+$$
+
 - Dynamic dense/sparse weight adjustment via API request payload (default $0.70 / 0.30$).
 
 ### 5. Cross-Encoder Stage-2 Reranking
@@ -169,7 +173,11 @@ flowchart TD
 
 ### 8. Composite Confidence Scoring & Graceful Fallback
 - Answers are accompanied by a composite multi-dimensional confidence score:
-  $$\text{Confidence} = 0.40 \cdot C_{\text{retrieval}} + 0.35 \cdot C_{\text{citation-grounding}} + 0.25 \cdot C_{\text{completeness}}$$
+
+$$
+\text{Confidence} = 0.40 \cdot C_{\text{retrieval}} + 0.35 \cdot C_{\text{citation-grounding}} + 0.25 \cdot C_{\text{completeness}}
+$$
+
 - If $\text{Confidence} < 0.60$, the system switches to a structured `low_confidence_fallback` status detailing searched topics, partially relevant sources, and recommended human actions.
 
 ---
