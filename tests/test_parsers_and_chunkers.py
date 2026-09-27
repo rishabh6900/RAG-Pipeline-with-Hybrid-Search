@@ -70,14 +70,26 @@ def test_rag_pipeline_embeddings():
 
 
 def test_chunk_deduplicator():
+    from src.ingestion.chunkers import DocumentChunk
     dedup = ChunkDeduplicator(threshold=0.95)
-    chunker = FixedSizeChunker(chunk_size=50, chunk_overlap=0)
-    chunks = chunker.chunk("doc_1", "test.txt", "Identical duplicate text content " * 10)
+    chunks = [
+        DocumentChunk(
+            chunk_id=f"doc_1_chunk_{i}",
+            doc_id="doc_1",
+            source_path="test.txt",
+            section_title="Duplicate Section",
+            chunk_index=i,
+            text="Identical duplicate text content for testing deduplication.",
+            token_count=10,
+            strategy="fixed"
+        )
+        for i in range(3)
+    ]
 
     # Identical embeddings
     identical_emb = [0.1] * 1536
     embeds = [identical_emb, identical_emb, identical_emb]
 
-    unique_chunks, unique_embeds, dup_count = dedup.filter_batch(chunks[:3], embeds)
+    unique_chunks, unique_embeds, dup_count = dedup.filter_batch(chunks, embeds)
     assert len(unique_chunks) == 1
     assert dup_count == 2

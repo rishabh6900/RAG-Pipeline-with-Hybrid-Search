@@ -1,3 +1,1 @@
-from .main import app
-
-__all__ = ["app"]
+"""API module for Enterprise Hybrid RAG."""

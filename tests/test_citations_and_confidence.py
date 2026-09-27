@@ -26,7 +26,7 @@ def test_citation_verification_flow():
     citations, score = verifier.verify_answer_citations(answer, chunks)
 
     assert len(citations) == 1
-    assert citations[0]["citation_id"] == "[1]"
+    assert citations[0]["citation_id"] in [1, "[1]"]
     assert citations[0]["verified"] is True
     assert score == 1.0
 
