@@ -110,10 +110,10 @@ class BenchmarkRunner:
             )
 
             retrieved_sources = [
-                c.get("metadata", {}).get("source_path", "")
+                c.get("metadata", {}).get("source_path") or c.get("source_path") or c.get("chunk_id", "")
                 for c in res["retrieved_chunks"]
             ]
-            cited_sources = [c["source_file"] for c in res["citations"]]
+            cited_sources = [c.get("source_file", "") for c in res["citations"]]
 
             hit_3 = EvaluationMetrics.calculate_hit_rate(retrieved_sources, target_source, k=3)
             hit_5 = EvaluationMetrics.calculate_hit_rate(retrieved_sources, target_source, k=5)

@@ -32,7 +32,6 @@
   - [POST /v1/ingest](#3-ingest-documents-post-v1ingest)
   - [GET /v1/documents](#4-list-indexed-documents-get-v1documents)
   - [GET /healthz](#5-health-check-get-healthz)
-- [Evaluation & Benchmark Suite](#-evaluation--benchmark-suite)
 - [Testing & Quality Assurance](#-testing--quality-assurance)
 - [Enterprise Architecture & System Design Decisions](#-enterprise-architecture--system-design-decisions)
 - [License](#-license)
@@ -434,41 +433,9 @@ docker compose up --build
 
 ---
 
-## 📊 Evaluation & Benchmark Suite
-
-The evaluation engine quantitatively evaluates pipeline retrieval hit rate, ranking quality (MRR), answer faithfulness, and citation precision against a curated golden test dataset ([`data/golden_dataset/eval_set.json`](file:///d:/project_2023_2027/RAG%20Pipeline%20with%20Hybrid%20Search/data/golden_dataset/eval_set.json)):
-
-```bash
-# Run the evaluation benchmark suite
-python -m src.evaluation.benchmark_runner
-```
-
-### 1. Chunking Strategy Ablation Benchmark
-
-| Metric | Fixed-Size (512/64) | Structure-Aware (Headers) | Semantic (Topic Boundary) |
-| :--- | :---: | :---: | :---: |
-| **Retrieval Hit Rate @ 3** | 68.4% | **88.2%** | 82.5% |
-| **Retrieval Hit Rate @ 5** | 76.2% | **94.6%** | 89.1% |
-| **Mean Reciprocal Rank (MRR)** | 0.681 | **0.874** | 0.819 |
-| **Answer Faithfulness** | 81.0% | **96.5%** | 93.8% |
-| **Citation Precision** | 74.5% | **95.2%** | 91.0% |
-| **Context Redundancy Rate** | 22.4% | **3.8%** | 6.2% |
-| **Average Latency (ms)** | 280ms | **315ms** | 410ms |
-
-### 2. Retrieval Mode & Reranker Ablation
-
-| Retrieval Strategy | Hit Rate @ 3 | Hit Rate @ 5 | MRR | Precision | Avg Latency |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Sparse (BM25 only)** | 71.4% | 78.6% | 0.692 | 75.0% | **~45ms** |
-| **Dense (Qdrant Vector)** | 78.5% | 85.7% | 0.741 | 82.1% | **~95ms** |
-| **Hybrid (RRF Dense + Sparse)** | 85.7% | 92.8% | 0.820 | 89.3% | **~120ms** |
-| **Hybrid + Cross-Encoder Reranker** | **94.6%** | **98.2%** | **0.912** | **96.4%** | **~210ms** |
-
----
-
 ## 🧪 Testing & Quality Assurance
 
-The codebase features comprehensive unit, integration, and benchmark tests covering API endpoints, LangChain execution, retrieval algorithms, chunkers, deduplication, citation verifiers, and offline evaluation metrics:
+The codebase features comprehensive unit, integration, and evaluation tests covering API endpoints, LangChain execution, retrieval algorithms, chunkers, deduplication, citation verifiers, and offline evaluation metrics:
 
 ```bash
 # Run the complete test suite

@@ -7,20 +7,23 @@ from src.evaluation.benchmark_runner import BenchmarkRunner
 
 
 def test_eval_metrics_hit_rate():
-    retrieved = ["doc_a.md", "doc_b.md", "doc_c.md", "doc_d.md"]
+    retrieved = ["data/raw/doc_a.md", "d:\\project\\data\\doc_b.md", "doc_c.md", "doc_d.md"]
     assert EvaluationMetrics.calculate_hit_rate(retrieved, "doc_a.md", k=3) == 1.0
+    assert EvaluationMetrics.calculate_hit_rate(retrieved, "doc_b.md", k=3) == 1.0
     assert EvaluationMetrics.calculate_hit_rate(retrieved, "doc_c.md", k=3) == 1.0
     assert EvaluationMetrics.calculate_hit_rate(retrieved, "doc_d.md", k=3) == 0.0
     assert EvaluationMetrics.calculate_hit_rate(retrieved, "doc_d.md", k=5) == 1.0
     assert EvaluationMetrics.calculate_hit_rate(retrieved, "non_existent.md", k=5) == 0.0
+    assert EvaluationMetrics.calculate_hit_rate(retrieved, "none", k=5) == 1.0
 
 
 def test_eval_metrics_mrr():
-    retrieved = ["doc_a.md", "doc_b.md", "doc_c.md"]
+    retrieved = ["data/raw/doc_a.md", "d:\\project\\data\\doc_b.md", "doc_c.md"]
     assert EvaluationMetrics.calculate_mrr(retrieved, "doc_a.md") == 1.0
     assert EvaluationMetrics.calculate_mrr(retrieved, "doc_b.md") == 0.5
     assert EvaluationMetrics.calculate_mrr(retrieved, "doc_c.md") == pytest.approx(0.3333, rel=1e-3)
     assert EvaluationMetrics.calculate_mrr(retrieved, "unknown.md") == 0.0
+    assert EvaluationMetrics.calculate_mrr(retrieved, "none") == 1.0
 
 
 def test_eval_metrics_faithfulness():

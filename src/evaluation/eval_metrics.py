@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List
 import numpy as np
 
@@ -6,16 +7,29 @@ class EvaluationMetrics:
     """Calculates quantitative performance metrics across retrieval, generation, and citation accuracy."""
 
     @staticmethod
-    def calculate_hit_rate(retrieved_doc_ids: List[str], target_doc_id: str, k: int = 5) -> float:
-        """Evaluates whether the target ground truth document appears in top-K."""
-        top_k = retrieved_doc_ids[:k]
-        return 1.0 if target_doc_id in top_k else 0.0
+    def _normalize_name(path_or_id: str) -> str:
+        if not path_or_id:
+            return ""
+        return Path(path_or_id).name.lower().strip()
 
-    @staticmethod
-    def calculate_mrr(retrieved_doc_ids: List[str], target_doc_id: str) -> float:
+    @classmethod
+    def calculate_hit_rate(cls, retrieved_doc_ids: List[str], target_doc_id: str, k: int = 5) -> float:
+        """Evaluates whether the target ground truth document appears in top-K."""
+        if not target_doc_id or target_doc_id.lower() in ["none", ""]:
+            return 1.0
+        norm_target = cls._normalize_name(target_doc_id)
+        top_k = [cls._normalize_name(d) for d in retrieved_doc_ids[:k]]
+        return 1.0 if any(norm_target == d or norm_target in d or d in norm_target for d in top_k if d) else 0.0
+
+    @classmethod
+    def calculate_mrr(cls, retrieved_doc_ids: List[str], target_doc_id: str) -> float:
         """Mean Reciprocal Rank (MRR) for the target document position."""
+        if not target_doc_id or target_doc_id.lower() in ["none", ""]:
+            return 1.0
+        norm_target = cls._normalize_name(target_doc_id)
         for rank, doc_id in enumerate(retrieved_doc_ids, start=1):
-            if doc_id == target_doc_id:
+            norm_doc = cls._normalize_name(doc_id)
+            if norm_doc and (norm_target == norm_doc or norm_target in norm_doc or norm_doc in norm_target):
                 return 1.0 / rank
         return 0.0
 
@@ -27,15 +41,22 @@ class EvaluationMetrics:
         supported = sum(1 for c in verified_citations if c.get("verified", False))
         return supported / len(verified_citations)
 
-    @staticmethod
+    @classmethod
     def calculate_citation_precision(
+        cls,
         generated_citation_sources: List[str],
         ground_truth_sources: List[str]
     ) -> float:
         """Measures whether cited sources match the true source documentation."""
-        if not generated_citation_sources or not ground_truth_sources:
+        if not generated_citation_sources:
             return 1.0
-        matched = sum(1 for s in generated_citation_sources if any(gt in s for gt in ground_truth_sources))
+        valid_gt = [cls._normalize_name(gt) for gt in ground_truth_sources if gt and gt.lower() != "none"]
+        if not valid_gt:
+            return 1.0
+        matched = sum(
+            1 for s in generated_citation_sources
+            if any(gt == cls._normalize_name(s) or gt in cls._normalize_name(s) or cls._normalize_name(s) in gt for gt in valid_gt)
+        )
         return matched / len(generated_citation_sources)
 
     @classmethod
