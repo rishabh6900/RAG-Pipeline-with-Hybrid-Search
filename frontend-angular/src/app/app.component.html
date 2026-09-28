@@ -220,6 +220,8 @@
       [isUploading]="isUploading"
       (ingestRequest)="onDocumentIngest($event)"
       (syncRawRequest)="onSyncRawDocuments($event)"
+      (deleteDocumentRequest)="onDeleteDocument($event)"
+      (clearAllRequest)="onClearAll()"
       (goToSearch)="activeMainTab = 'query'"
     ></app-document-ingest>
   </div>

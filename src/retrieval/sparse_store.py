@@ -10,15 +10,29 @@ from config.settings import settings
 from src.ingestion.chunkers import DocumentChunk
 
 
+_sparse_store_cache: Dict[str, "SparseBM25Store"] = {}
+
+
 class SparseBM25Store:
     """Sparse keyword index utilizing BM25Okapi with technical identifier preservation."""
 
+    def __new__(cls, index_path: Optional[str] = None):
+        key = os.path.abspath(index_path or settings.BM25_INDEX_PATH)
+        if key not in _sparse_store_cache:
+            instance = super(SparseBM25Store, cls).__new__(cls)
+            _sparse_store_cache[key] = instance
+            instance._initialized = False
+        return _sparse_store_cache[key]
+
     def __init__(self, index_path: Optional[str] = None):
+        if getattr(self, "_initialized", False):
+            return
         self.index_path = index_path or settings.BM25_INDEX_PATH
         self.corpus_chunks: List[DocumentChunk] = []
         self.bm25: Optional[BM25Okapi] = None
         self.tokenized_corpus: List[List[str]] = []
         self._load_if_exists()
+        self._initialized = True
 
     @staticmethod
     def tokenize(text: str) -> List[str]:
@@ -33,9 +47,7 @@ class SparseBM25Store:
     def build_index(self, chunks: List[DocumentChunk]) -> int:
         """Construct BM25 inverted index over the provided document chunks."""
         if not chunks:
-            self.corpus_chunks = []
-            self.bm25 = None
-            self.tokenized_corpus = []
+            self.reset()
             return 0
 
         self.corpus_chunks = list(chunks)
@@ -139,9 +151,50 @@ class SparseBM25Store:
     def count(self) -> int:
         return len(self.corpus_chunks)
 
+    def delete_document(self, doc_identifier: str) -> int:
+        """Delete all chunks for a given document and rebuild BM25 index."""
+        if not self.corpus_chunks:
+            return 0
+        original_count = len(self.corpus_chunks)
+        clean_ident = os.path.basename(doc_identifier).strip().lower()
+        
+        filtered = []
+        for c in self.corpus_chunks:
+            c_src_base = os.path.basename(c.source_path).strip().lower()
+            c_doc_base = os.path.basename(c.doc_id).strip().lower()
+            c_src_full = c.source_path.replace("\\", "/").strip().lower()
+            
+            is_match = (
+                c_src_base == clean_ident
+                or c_doc_base == clean_ident
+                or clean_ident in c_src_base
+                or clean_ident in c_src_full
+                or c_src_full.endswith(clean_ident)
+            )
+            if not is_match:
+                filtered.append(c)
+
+        self.corpus_chunks = filtered
+        deleted_count = original_count - len(self.corpus_chunks)
+        
+        if len(self.corpus_chunks) == 0:
+            self.reset()
+        elif deleted_count > 0:
+            self.build_index(self.corpus_chunks)
+            
+        logger.info(f"Deleted {deleted_count} BM25 chunks for document '{doc_identifier}'. Remaining: {len(self.corpus_chunks)}")
+        return deleted_count
+
     def reset(self):
+        """Purge and reset BM25 index in memory and on disk."""
         self.corpus_chunks = []
         self.bm25 = None
         self.tokenized_corpus = []
         if os.path.exists(self.index_path):
-            os.remove(self.index_path)
+            try:
+                os.remove(self.index_path)
+            except Exception as e:
+                logger.warning(f"Could not remove BM25 index file {self.index_path}: {e}")
+        logger.info("Purged and reset BM25 lexical index to 0 chunks.")
+
+

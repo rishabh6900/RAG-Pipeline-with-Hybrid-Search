@@ -125,4 +125,35 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  onDeleteDocument(docName: string): void {
+    this.isUploading = true;
+    this.ragApi.deleteDocument(docName, true).subscribe({
+      next: () => {
+        this.isUploading = false;
+        this.fetchDocuments();
+        this.fetchSystemStatus();
+      },
+      error: (err) => {
+        console.error('Delete failed:', err);
+        this.isUploading = false;
+      }
+    });
+  }
+
+  onClearAll(): void {
+    this.isUploading = true;
+    this.ragApi.clearAllDocuments(false).subscribe({
+      next: () => {
+        this.isUploading = false;
+        this.fetchDocuments();
+        this.fetchSystemStatus();
+      },
+      error: (err) => {
+        console.error('Clear all failed:', err);
+        this.isUploading = false;
+      }
+    });
+  }
 }
+

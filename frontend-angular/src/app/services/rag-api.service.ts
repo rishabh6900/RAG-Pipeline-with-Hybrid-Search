@@ -59,4 +59,14 @@ export class RagApiService {
   syncRawDocuments(strategy: string = 'all'): Observable<any> {
     return this.http.post(`${this.baseUrl}/v1/ingest/sync-raw?strategy=${strategy}`, {});
   }
+
+  deleteDocument(documentName: string, deleteFile: boolean = true): Observable<any> {
+    const encodedName = encodeURIComponent(documentName);
+    return this.http.delete(`${this.baseUrl}/v1/documents/${encodedName}?delete_file=${deleteFile}`);
+  }
+
+  clearAllDocuments(deleteRawFiles: boolean = false): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/v1/documents?delete_raw_files=${deleteRawFiles}`);
+  }
 }
+

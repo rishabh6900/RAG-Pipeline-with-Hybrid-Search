@@ -119,22 +119,19 @@ class GroundedGenerator:
 
     @classmethod
     def _local_grounded_fallback(cls, question: str, chunks: List[Dict[str, Any]]) -> str:
-        """Heuristic grounded answer synthesizer for local runs without LLM keys."""
+        """Heuristic grounded answer synthesizer for local runs without valid LLM keys."""
         top_chunk = chunks[0]
-        meta = top_chunk.get("metadata", {})
         snippet = cls._extract_substantive_snippet(top_chunk.get("text", ""))
-        src_name = meta.get('source_path', 'document').replace('\\', '/').split('/')[-1]
-        sec_title = meta.get('section_title', 'General')
         
         answer_parts = [
-            f"According to {src_name} ({sec_title}), {snippet} [1]."
+            f"{snippet} [1]."
         ]
         if len(chunks) > 1:
-            second_meta = chunks[1].get("metadata", {})
             second_snippet = cls._extract_substantive_snippet(chunks[1].get("text", ""))
-            second_src = second_meta.get('source_path', 'document').replace('\\', '/').split('/')[-1]
-            answer_parts.append(
-                f"Furthermore, {second_src} indicates that {second_snippet} [2]."
-            )
+            if second_snippet and second_snippet != snippet:
+                answer_parts.append(
+                    f"Additionally, {second_snippet} [2]."
+                )
 
         return " ".join(answer_parts)
+

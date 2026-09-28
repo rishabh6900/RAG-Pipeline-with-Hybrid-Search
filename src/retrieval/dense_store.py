@@ -48,15 +48,16 @@ class DenseVectorStore:
             if client_key not in _qdrant_client_cache:
                 _qdrant_client_cache[client_key] = QdrantClient(
                     url=settings.QDRANT_URL,
-                    api_key=settings.QDRANT_API_KEY
+                    api_key=settings.QDRANT_API_KEY,
+                    timeout=90
                 )
-                logger.info(f"Initialized Qdrant Client in Server Mode at '{settings.QDRANT_URL}'")
+                logger.info(f"Initialized Qdrant Client in Server Mode at '{settings.QDRANT_URL}' with 90s timeout")
             self.client = _qdrant_client_cache[client_key]
         else:
             os.makedirs(self.persist_dir, exist_ok=True)
             client_key = f"path:{os.path.abspath(self.persist_dir)}"
             if client_key not in _qdrant_client_cache:
-                _qdrant_client_cache[client_key] = QdrantClient(path=self.persist_dir)
+                _qdrant_client_cache[client_key] = QdrantClient(path=self.persist_dir, timeout=90)
                 logger.info(f"Initialized Qdrant Client in Embedded Disk Mode at '{self.persist_dir}'")
             self.client = _qdrant_client_cache[client_key]
 
@@ -152,13 +153,22 @@ class DenseVectorStore:
                 )
             )
 
-        self.client.upsert(
-            collection_name=self.collection_name,
-            points=points,
-            wait=True
-        )
-        logger.info(f"Upserted {len(points)} vector points into Qdrant collection '{self.collection_name}'.")
-        return len(points)
+        # Batch upsert points to prevent HTTP WriteTimeout over WAN to Qdrant Cloud
+        batch_size = 64
+        total_upserted = 0
+        for i in range(0, len(points), batch_size):
+            batch = points[i : i + batch_size]
+            self.client.upsert(
+                collection_name=self.collection_name,
+                points=batch,
+                wait=True
+            )
+            total_upserted += len(batch)
+            logger.debug(f"Upserted batch {i // batch_size + 1}/{(len(points) + batch_size - 1) // batch_size} ({total_upserted}/{len(points)} points)")
+
+        logger.info(f"Successfully upserted {total_upserted} vector points into Qdrant collection '{self.collection_name}'.")
+        return total_upserted
+
 
     def search(self, query: str, top_k: int = 15, where_filter: Optional[Dict] = None) -> List[Dict[str, Any]]:
         """Dense similarity search returning ranked chunks with cosine similarity in Qdrant."""
@@ -266,6 +276,39 @@ class DenseVectorStore:
             logger.debug(f"Could not scroll vectors from Qdrant: {e}")
             return []
 
+    def delete_document(self, doc_identifier: str) -> int:
+        """Delete all chunks and vectors belonging to a document from Qdrant."""
+        try:
+            points, _ = self.client.scroll(
+                collection_name=self.collection_name,
+                limit=10000,
+                with_payload=True,
+                with_vectors=False
+            )
+            ids_to_delete = []
+            clean_ident = os.path.basename(doc_identifier).lower()
+            for p in points:
+                payload = p.payload or {}
+                source_p = str(payload.get("source_path", "")).replace("\\", "/")
+                doc_id = str(payload.get("doc_id", "")).replace("\\", "/")
+                source_base = os.path.basename(source_p).lower()
+                doc_base = os.path.basename(doc_id).lower()
+
+                if (clean_ident in [source_base, doc_base]) or (doc_identifier.lower() in [source_p.lower(), doc_id.lower()]):
+                    ids_to_delete.append(p.id)
+
+            if ids_to_delete:
+                self.client.delete(
+                    collection_name=self.collection_name,
+                    points_selector=ids_to_delete,
+                    wait=True
+                )
+                logger.info(f"Deleted {len(ids_to_delete)} vector points from Qdrant for document '{doc_identifier}'.")
+            return len(ids_to_delete)
+        except Exception as e:
+            logger.error(f"Error deleting document '{doc_identifier}' from Qdrant: {e}")
+            raise
+
     def count(self) -> int:
         """Return total vector count in Qdrant collection."""
         try:
@@ -284,3 +327,4 @@ class DenseVectorStore:
             logger.info(f"Reset Qdrant collection '{self.collection_name}'.")
         except Exception as e:
             logger.error(f"Error resetting Qdrant collection: {e}")
+

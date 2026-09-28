@@ -123,13 +123,27 @@ import { DocumentsResponse } from '../../models/rag.models';
             <h3 class="explorer-title">Active Corpus Files</h3>
             <span class="explorer-sub">Synced across Qdrant Vector Collection & In-Memory BM25 Lexical Store</span>
           </div>
-          <button
-            class="sync-pill-btn"
-            (click)="syncAllFiles()"
-            [disabled]="isUploading"
-          >
-            Re-Index All Files
-          </button>
+          <div class="explorer-actions">
+            <button
+              class="sync-pill-btn"
+              (click)="syncAllFiles()"
+              [disabled]="isUploading"
+            >
+              Re-Index All Files
+            </button>
+            <button
+              class="purge-pill-btn"
+              (click)="onClearAll()"
+              [disabled]="isUploading"
+              title="Purge all embeddings from Qdrant Cloud and BM25 index"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Purge Qdrant Store</span>
+            </button>
+          </div>
         </div>
 
         <div class="docs-grid" *ngIf="documentsData?.raw_documents?.length">
@@ -138,9 +152,24 @@ import { DocumentsResponse } from '../../models/rag.models';
               <div class="doc-file-badge">
                 <span class="doc-type-label">{{ getFileType(doc) }}</span>
               </div>
-              <span class="dual-indexed-tag">
-                <span class="tag-dot"></span> Dual Indexed
-              </span>
+              <div class="doc-header-right">
+                <span class="dual-indexed-tag">
+                  <span class="tag-dot"></span> Dual Indexed
+                </span>
+                <button
+                  class="doc-delete-btn"
+                  (click)="onDeleteDocument(doc)"
+                  [disabled]="isUploading"
+                  [title]="'Delete ' + doc + ' from Qdrant Cloud and BM25'"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div class="doc-name-box">
@@ -149,10 +178,10 @@ import { DocumentsResponse } from '../../models/rag.models';
 
             <div class="doc-footer">
               <div class="storage-tags">
-                <span class="storage-pill dense">Qdrant DB</span>
+                <span class="storage-pill dense">Qdrant Cloud</span>
                 <span class="storage-pill sparse">BM25</span>
               </div>
-              <span class="ready-status">Ready</span>
+              <span class="ready-status">Indexed</span>
             </div>
           </div>
         </div>
@@ -163,6 +192,7 @@ import { DocumentsResponse } from '../../models/rag.models';
         </div>
       </div>
     </div>
+
   `,
   styles: [`
     .ingest-card {
@@ -447,18 +477,76 @@ import { DocumentsResponse } from '../../models/rag.models';
     }
 
     .explorer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
-    .explorer-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-pure);
+    .explorer-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
-    .explorer-sub {
+    .purge-pill-btn {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #ef4444;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
       font-size: 0.78rem;
-      color: var(--text-2);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .purge-pill-btn:hover:not(:disabled) {
+      background: #ef4444;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.45);
+    }
+
+    .purge-pill-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .doc-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .doc-delete-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-3);
+      padding: 0.25rem 0.35rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .doc-delete-btn:hover:not(:disabled) {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      transform: scale(1.1);
+    }
+
+    .doc-delete-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
 
     .docs-grid {
@@ -726,6 +814,8 @@ export class DocumentIngestComponent {
   @Input() isUploading = false;
   @Output() ingestRequest = new EventEmitter<{ file: File; strategy: string }>();
   @Output() syncRawRequest = new EventEmitter<string>();
+  @Output() deleteDocumentRequest = new EventEmitter<string>();
+  @Output() clearAllRequest = new EventEmitter<void>();
   @Output() goToSearch = new EventEmitter<void>();
 
   selectedFile: File | null = null;
@@ -770,6 +860,22 @@ export class DocumentIngestComponent {
     setTimeout(() => this.uploadSuccessMessage = null, 6000);
   }
 
+  onDeleteDocument(docName: string) {
+    if (confirm(`Are you sure you want to delete '${docName}' from Qdrant Cloud and BM25 store?`)) {
+      this.deleteDocumentRequest.emit(docName);
+      this.uploadSuccessMessage = `Deleting '${docName}' from Qdrant Cloud & BM25 indices...`;
+      setTimeout(() => this.uploadSuccessMessage = null, 5000);
+    }
+  }
+
+  onClearAll() {
+    if (confirm("Are you sure you want to PURGE ALL stored embeddings from Qdrant Cloud collection and BM25 index?")) {
+      this.clearAllRequest.emit();
+      this.uploadSuccessMessage = `Purging all vector collections from Qdrant Cloud...`;
+      setTimeout(() => this.uploadSuccessMessage = null, 5000);
+    }
+  }
+
   getFileIcon(filename: string): string {
     return '';
   }
@@ -779,3 +885,4 @@ export class DocumentIngestComponent {
     return ext || 'DOC';
   }
 }
+

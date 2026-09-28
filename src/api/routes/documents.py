@@ -85,3 +85,35 @@ async def list_documents():
     except Exception as e:
         logger.error(f"Error listing documents: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/documents/{document_name}")
+async def delete_document(document_name: str, delete_file: bool = True):
+    """Delete a document's embeddings from Qdrant Cloud/Local and remove from BM25 index."""
+    try:
+        res = pipeline.delete_document(document_name, delete_file=delete_file)
+        return {
+            "status": "success",
+            "message": f"Successfully deleted document '{document_name}' from Qdrant Cloud & BM25 index.",
+            "details": res
+        }
+    except Exception as e:
+        logger.error(f"Error deleting document '{document_name}': {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/documents")
+@router.post("/documents/clear")
+async def clear_all_documents(delete_raw_files: bool = False):
+    """Purge all vector embeddings and chunks from Qdrant Cloud and BM25 index."""
+    try:
+        res = pipeline.clear_all(delete_raw_files=delete_raw_files)
+        return {
+            "status": "success",
+            "message": "Successfully purged all embeddings from Qdrant Cloud and BM25.",
+            "details": res
+        }
+    except Exception as e:
+        logger.error(f"Error clearing documents: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+

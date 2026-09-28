@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from config.logging_config import logger
 from config.settings import settings
 from src.ingestion.chunkers import DocumentChunk, get_chunker
@@ -118,6 +118,51 @@ class IngestionPipeline:
             "indexed_chunks": total_indexed_count,
             "duplicates_skipped": total_dup_count
         }
+
+    def delete_document(self, doc_name: str, delete_file: bool = True) -> Dict[str, Any]:
+        """Delete a document from Qdrant vector store, BM25 index, and optionally data/raw disk."""
+        clean_name = os.path.basename(doc_name)
+        dense_deleted = self.dense_store.delete_document(clean_name)
+        sparse_deleted = self.sparse_store.delete_document(clean_name)
+
+        file_deleted = False
+        if delete_file:
+            raw_target = Path("./data/raw") / clean_name
+            if raw_target.exists():
+                try:
+                    os.remove(raw_target)
+                    file_deleted = True
+                    logger.info(f"Deleted physical raw file: {raw_target}")
+                except Exception as e:
+                    logger.error(f"Could not delete physical file {raw_target}: {e}")
+
+        return {
+            "document": clean_name,
+            "dense_vectors_deleted": dense_deleted,
+            "sparse_chunks_deleted": sparse_deleted,
+            "file_deleted": file_deleted
+        }
+
+    def clear_all(self, delete_raw_files: bool = False) -> Dict[str, Any]:
+        """Purge all vectors in Qdrant collection, BM25 index, and optionally raw files."""
+        self.dense_store.reset()
+        self.sparse_store.reset()
+        files_deleted = 0
+        if delete_raw_files and os.path.exists("./data/raw"):
+            for f in os.listdir("./data/raw"):
+                p = os.path.join("./data/raw", f)
+                if os.path.isfile(p):
+                    try:
+                        os.remove(p)
+                        files_deleted += 1
+                    except Exception:
+                        pass
+        return {
+            "status": "cleared",
+            "message": "Successfully purged all vector embeddings and lexical indices from Qdrant & BM25.",
+            "files_deleted": files_deleted
+        }
+
 
 
 if __name__ == "__main__":
